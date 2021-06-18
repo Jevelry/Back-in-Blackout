@@ -19,7 +19,7 @@ public class nasa extends Satellite{
     public void validateConnections(LocalTime currentTime) {
         for (Device d : connectedDevices) {
             if (!d.inActivationPeriod(currentTime) || !isVisible(d)) {
-                disconnect(d);
+                disconnect(d, currentTime);
                 Connections--; 
             }
         }
@@ -33,7 +33,7 @@ public class nasa extends Satellite{
         if (Connections == 6) {
             if (d.getPosition() >= 30 && d.getPosition() <= 40){
                 for (Device i : connectedDevices) {
-                    if (i.getPosition() <= 30 || i.getPosition() >= 40) {
+                    if (i.getPosition() < 30 || i.getPosition() > 40) {
                         return true;
                     }
                 }
@@ -48,16 +48,16 @@ public class nasa extends Satellite{
         connection newConnection = new connection(d.getId(), currentTime, getId(), ttc);
         addConnection(newConnection);
         if (Connections == 6) {
-            dropOldestConnection();
+            dropOldestConnection(currentTime);
         }
         connectedDevices.add(d);
         Connections++;
     }
 
-    private void dropOldestConnection() {
+    private void dropOldestConnection(LocalTime currentTime) {
         for (Device d : connectedDevices) {
             if (d.getPosition() >= 30 && d.getPosition() <= 40){
-                disconnect(d);
+                disconnect(d, currentTime);
                 connectedDevices.remove(d);
                 break;
             }

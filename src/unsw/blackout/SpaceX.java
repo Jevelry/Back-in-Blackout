@@ -17,7 +17,7 @@ public class SpaceX extends Satellite{
     public void validateConnections(LocalTime currentTime) {
         for (Device d : connectedDevices) {
             if (!d.inActivationPeriod(currentTime) || !isVisible(d)) {
-                disconnect(d);
+                disconnect(d, currentTime);
                 connectedDevices.remove(d);
             }
 

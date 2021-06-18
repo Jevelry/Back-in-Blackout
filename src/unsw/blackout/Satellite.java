@@ -5,9 +5,8 @@ import java.time.LocalTime;
 import java.util.ArrayList;
 
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
-import java.util.Objects;
+import java.util.Objects; 
 
 
 public class Satellite {
@@ -146,10 +145,10 @@ public class Satellite {
 
 
 
-    public void disconnect(Device d) {
+    public void disconnect(Device d, LocalTime currentTime) {
         for (connection c : connections) {
             if (c.validateConnection(d.getId())) {
-                c.endConnection();
+                c.endConnection(currentTime);
             }
         }
         d.disconnect();

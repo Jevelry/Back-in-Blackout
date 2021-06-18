@@ -14,6 +14,9 @@ public class Blackout {
     private ArrayList<Satellite> satellites = new ArrayList<Satellite>();
     private List<Device> devices = new ArrayList<Device>();   
     private LocalTime currentTime = LocalTime.of(0,0);
+    Comparator<Device> compareById = (Device o1, Device o2) -> o1.getId().compareTo( o2.getId() );
+    Comparator<Satellite> compareByIds = (Satellite o1, Satellite o2) -> o1.getId().compareTo( o2.getId() );
+    Comparator<Satellite> compareByPosition = (Satellite o1, Satellite o2) -> Double.compare(o1.getPosition(),(o2.getPosition()) );
     
     /**
     * Creates new device and appends to list of devices
@@ -34,7 +37,8 @@ public class Blackout {
             Desktop newDevice = new Desktop(id, type, position);
             devices.add(newDevice);
         }
-   
+        Collections.sort(devices, compareById);
+
     }
 
     /**
@@ -63,7 +67,7 @@ public class Blackout {
             SpaceX newSatellite = new SpaceX(id, type, height, position);
             satellites.add(newSatellite); 
         }
-         
+        Collections.sort(satellites, compareByIds); 
     }
 
     
@@ -144,8 +148,7 @@ public class Blackout {
     public JSONObject showWorldState() {
         updatePossibleConnections();
         // used to sort devices and satellites by id alphabetically
-        Comparator<Device> compareById = (Device o1, Device o2) -> o1.getId().compareTo( o2.getId() );
-        Comparator<Satellite> compareByIds = (Satellite o1, Satellite o2) -> o1.getId().compareTo( o2.getId() );
+
         Collections.sort(devices, compareById);
         Collections.sort(satellites, compareByIds);
 
@@ -188,7 +191,7 @@ public class Blackout {
 
 
     private void processConnections() {
-        Comparator<Satellite> compareByPosition = (Satellite o1, Satellite o2) -> Double.compare(o1.getPosition(),(o2.getPosition()) );
+
         Collections.sort(satellites, compareByPosition);
         
         
@@ -197,7 +200,6 @@ public class Blackout {
             findPossibleConnections(d, possibleConnections);
             d.processOptions(possibleConnections, currentTime);
         }
-        Comparator<Satellite> compareByIds = (Satellite o1, Satellite o2) -> o1.getId().compareTo( o2.getId() );
         Collections.sort(satellites, compareByIds);
     }
 

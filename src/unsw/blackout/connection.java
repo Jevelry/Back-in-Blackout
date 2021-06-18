@@ -26,8 +26,9 @@ public class connection {
     }
 
 
-    public void endConnection(){
-        endTime = startTime.plusMinutes(minutesActive + 1);
+    public void endConnection(LocalTime currentTime){
+        endTime = currentTime;
+        minutesActive -= 1;
     }
     
     /*

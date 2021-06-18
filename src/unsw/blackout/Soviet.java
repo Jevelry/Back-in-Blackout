@@ -29,7 +29,7 @@ public class Soviet extends Satellite{
     public void validateConnections(LocalTime currentTime) {
         for (Device d : connectedDevices) {
             if (!d.inActivationPeriod(currentTime) || !isVisible(d)) {
-                disconnect(d);
+                disconnect(d, currentTime);
                 Connections--;
                 
             }
@@ -42,13 +42,13 @@ public class Soviet extends Satellite{
         connection newConnection = new connection(d.getId(), currentTime, getId(), ttc);
         addConnection(newConnection);
         if (Connections == 10) {
-            dropOldestConnection();
+            dropOldestConnection(currentTime);
         }
         connectedDevices.add(d);
         Connections++;
     }
-    private void dropOldestConnection() {
-        disconnect(connectedDevices.get(0));
+    private void dropOldestConnection(LocalTime currentTime) {
+        disconnect(connectedDevices.get(0), currentTime);
         connectedDevices.remove(0);
         Connections--;
     }
