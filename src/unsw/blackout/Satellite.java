@@ -1,9 +1,9 @@
 package unsw.blackout;
 
-import java.sql.Connection;
+
 import java.time.LocalTime;
 import java.util.ArrayList;
-import java.util.Collection;
+
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
@@ -134,9 +134,9 @@ public class Satellite {
         //sortConnections(connections);
     }
 
-    private void sortConnections(List<connection> connections) {
-        connections.sort(Comparator.comparing(connection::getStart));
-    }
+    // private void sortConnections(List<connection> connections) {
+    //     connections.sort(Comparator.comparing(connection::getStart));
+    // }
 
     // overriden function
     public int calcTimetoConnect(int timeToConnect) {
@@ -164,7 +164,7 @@ public class Satellite {
     public void updateActiveConnections() {
         if (!Objects.isNull(connections)) {
             for (connection c : connections) {
-                if (Objects.isNull(c.getEnd())) {
+                if (Objects.isNull(c.getEndTime())) {
                     c.updateConnection();
                 }
             }

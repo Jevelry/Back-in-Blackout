@@ -34,15 +34,15 @@ public class connection {
     getters and setter, not used but i think are needed for showWorldState
     */
 
-    public String getDeviceID() {
+    public String getDeviceId() {
         return this.deviceId;
     }
 
-    public LocalTime getStart() {
+    public LocalTime getStartTime() {
         return this.startTime;
     }
 
-    public LocalTime getEnd() {
+    public LocalTime getEndTime() {
         return this.endTime;
     }
 
@@ -50,7 +50,7 @@ public class connection {
         return this.minutesActive;
     }
 
-    public String getSatelliteID() {
+    public String getSatelliteId() {
         return this.satelliteId;
     }
 
