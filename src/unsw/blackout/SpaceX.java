@@ -2,6 +2,7 @@ package unsw.blackout;
 
 import java.time.LocalTime;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 public class SpaceX extends Satellite {
@@ -11,13 +12,16 @@ public class SpaceX extends Satellite {
         super(id, type, height, position);
         setVelocity(55.5);
         addSupportedDevice("HandheldDevice");
+        addSupportedDevice("MobileXPhone");
     }
     @Override
     public void validateConnections(LocalTime currentTime) {
-        for (Device d : connectedDevices) {
+        Iterator<Device> itr = connectedDevices.iterator();
+        while (itr.hasNext()) {
+            Device d = itr.next();
             if (!d.inActivationPeriod(currentTime) || !isVisible(d)) {
                 disconnect(d, currentTime, this);
-                connectedDevices.remove(d);
+                itr.remove();
             }
         }
     }

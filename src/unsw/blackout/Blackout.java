@@ -37,6 +37,14 @@ public class Blackout {
             Desktop newDevice = new Desktop(id, type, position);
             devices.add(newDevice);
         }
+        if (type.equals("MobileXPhone")) {            
+            MobileX newDevice = new MobileX(id, type, position);
+            devices.add(newDevice);
+        }
+        if (type.equals("AWSCloudServer")) {            
+            AWSCloudServer newDevice = new AWSCloudServer(id, type, position);
+            devices.add(newDevice);
+        }
         Collections.sort(devices, compareById);
 
     }
@@ -171,7 +179,7 @@ public class Blackout {
             currentTime = currentTime.plusMinutes(1);
         }        
     }
-    
+
     /**
      * Updates existing connections (incremants minutesActive)
      */

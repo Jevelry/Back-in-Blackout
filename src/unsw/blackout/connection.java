@@ -28,9 +28,9 @@ public class connection {
     }
 
     /*
-     * getters and setter, not used but i think are needed for showWorldState
+     * getters and setter, not all are used but i think are needed for showWorldState
      */
-
+//////////////////////////
     public String getDeviceId() {
         return this.deviceId;
     }
@@ -50,7 +50,12 @@ public class connection {
     public String getSatelliteId() {
         return this.satelliteId;
     }
-
+////////////////////////////
+    /**
+     * checks if connection is still active
+     * @param id
+     * @return true or false
+     */
     public boolean validateConnection(String id) {
         if (Objects.isNull(endTime) && deviceId.equals(id)) {
             return true;

@@ -7,7 +7,7 @@ public class MobileX extends Handheld {
 
     public MobileX(String id, String type, double position) {
         super(id, type, position);
-
+        
     }
 
     @Override

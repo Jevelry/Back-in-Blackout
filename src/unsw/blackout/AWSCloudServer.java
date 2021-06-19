@@ -35,7 +35,7 @@ public class AWSCloudServer extends Desktop {
                     counter++;
                 }
             }
-            if (counter >= 2)
+            if (counter >= 2) {
                 for (Satellite s : possibleConnections) {
                     if (activeConnections < 2) {
                         if (s.canConnect(this)) {
@@ -45,7 +45,9 @@ public class AWSCloudServer extends Desktop {
                         }
                     }
                 }
-            setConnected(true);
+                setConnected(true);
+                return;
+            }    
         }
     }
 

@@ -2,7 +2,9 @@ package unsw.blackout;
 
 import java.time.LocalTime;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
+
 
 public class Soviet extends Satellite {
     private int Connections;
@@ -13,6 +15,7 @@ public class Soviet extends Satellite {
         setVelocity(100);
         addSupportedDevice("LaptopDevice");
         addSupportedDevice("DesktopDevice");
+        addSupportedDevice("AWSCloudServer");
 
     }
     @Override
@@ -27,13 +30,14 @@ public class Soviet extends Satellite {
     }
     @Override
     public void validateConnections(LocalTime currentTime) {
-        for (Device d : connectedDevices) {
+        Iterator<Device> itr = connectedDevices.iterator();
+        while (itr.hasNext()) {
+            Device d = itr.next();
             if (!d.inActivationPeriod(currentTime) || !isVisible(d)) {
                 disconnect(d, currentTime, this);
+                itr.remove();
                 Connections--;
-
             }
-
         }
     }
     @Override

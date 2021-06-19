@@ -2,6 +2,7 @@ package unsw.blackout;
 
 import java.time.LocalTime;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 public class BlueOrigin extends Satellite {
@@ -16,14 +17,19 @@ public class BlueOrigin extends Satellite {
         addSupportedDevice("HandheldDevice");
         addSupportedDevice("DesktopDevice");
         addSupportedDevice("LaptopDevice");
+        addSupportedDevice("MobileXPhone");
+        addSupportedDevice("AWSCloudServer");
+
     }
 
     @Override
     public void validateConnections(LocalTime currentTime) {
-        for (Device d : connectedDevices) {
+        Iterator<Device> itr = connectedDevices.iterator();
+        while (itr.hasNext()) {
+            Device d = itr.next();
             if (!d.inActivationPeriod(currentTime) || !isVisible(d)) {
                 disconnect(d, currentTime, this);
-                connectedDevices.remove(d);
+                itr.remove();
                 if (d.getType().equals("DesktopDevice")) {
                     Desktops--;
                     Connections--;
