@@ -4,38 +4,39 @@ import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Soviet extends Satellite{
+public class Soviet extends Satellite {
     private int Connections;
     private List<Device> connectedDevices = new ArrayList<Device>();
-
 
     public Soviet(String id, String type, double height, double position) {
         super(id, type, height, position);
         setVelocity(100);
-        addSupportedDevice("LaptopDevice"); 
+        addSupportedDevice("LaptopDevice");
         addSupportedDevice("DesktopDevice");
 
     }
     @Override
     public void updatePosition() {
-        if (getPosition() > 190 && getPosition() < 345){
+        if (getPosition() > 190 && getPosition() < 345) {
             setVelocity(-100);
         }
-        if (getPosition() < 140 && getPosition() >= 345){
+        if (getPosition() < 140 && getPosition() >= 345) {
             setVelocity(100);
-        }        
+        }
         super.updatePosition();
     }
+    @Override
     public void validateConnections(LocalTime currentTime) {
         for (Device d : connectedDevices) {
             if (!d.inActivationPeriod(currentTime) || !isVisible(d)) {
-                disconnect(d, currentTime);
+                disconnect(d, currentTime, this);
                 Connections--;
-                
+
             }
 
         }
     }
+    @Override
     public void connect(LocalTime currentTime, Device d, int timeToConnect) {
         int ttc = calcTimetoConnect(timeToConnect);
 
@@ -47,8 +48,9 @@ public class Soviet extends Satellite{
         connectedDevices.add(d);
         Connections++;
     }
+
     private void dropOldestConnection(LocalTime currentTime) {
-        disconnect(connectedDevices.get(0), currentTime);
+        disconnect(connectedDevices.get(0), currentTime, this);
         connectedDevices.remove(0);
         Connections--;
     }
@@ -58,6 +60,5 @@ public class Soviet extends Satellite{
         return 2 * timeToConnect;
 
     }
-
 
 }

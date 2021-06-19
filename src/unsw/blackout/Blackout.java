@@ -49,8 +49,6 @@ public class Blackout {
     * @param  height measured from centre of planet, so it??ll include the radius of the ring      
     */
     public void createSatellite(String id, String type, double height, double position) {
-        
-
         if (type.equals("NasaSatellite")) {            
             nasa newSatellite = new nasa(id, type, height, position);
             satellites.add(newSatellite);
@@ -69,12 +67,14 @@ public class Blackout {
         }
         Collections.sort(satellites, compareByIds); 
     }
-
-    
+    /**
+     * Adds an activation period to device
+     * @param deviceId
+     * @param start
+     * @param durationInMinutes
+     */
     public void scheduleDeviceActivation(String deviceId, LocalTime start, int durationInMinutes) {
-
         traceIdDevice(deviceId).addActivationPeriod(start, durationInMinutes);
-
     }
 
     /**
@@ -105,7 +105,7 @@ public class Blackout {
     /**
     * Finds satellite with ID
     * @param  id  unique identifier for Satellite 
-    * @return  d  Satellite with coressponding id    
+    * @return  Satellite with coressponding id    
     */
     private Satellite traceIdSatellite(String id) {
         for (Satellite d: satellites){
@@ -119,7 +119,7 @@ public class Blackout {
     /**
     * Finds device with ID
     * @param  id  unique identifier for device 
-    * @return  d  device with coressponding id    
+    * @return  device with coressponding id    
     */
     private Device traceIdDevice(String id) {
         for (Device s: devices){
@@ -130,10 +130,9 @@ public class Blackout {
         return null;
     }
     /**
-    * updates world state by forcing Satellite to check connections   
+    * Updates Satellite possible connections based on range and device type  
     */
-    public void updatePossibleConnections() {
-        
+    private void updatePossibleConnections() {    
         for (Satellite s : satellites) {
             for (Device d : devices) {
                 if (s.isSupported(d) && s.isVisible(d)){
@@ -143,11 +142,10 @@ public class Blackout {
                 }
             }
         }
-
     }
+
     public JSONObject showWorldState() {
         updatePossibleConnections();
-        // used to sort devices and satellites by id alphabetically
 
         Collections.sort(devices, compareById);
         Collections.sort(satellites, compareByIds);
@@ -156,21 +154,14 @@ public class Blackout {
         JSONArray devices = new JSONArray(this.devices);
         JSONArray satellites = new JSONArray(this.satellites);
 
-        // TODO:
-
         result.put("devices", devices);
         result.put("satellites", satellites);
-
         result.put("currentTime", currentTime);
+
         return result;
     }
     
-    public void simulate(int tickDurationInMinutes) {
-        // TODO:
-        // for each step of the simulation:
-        //     update the position of each satellite
-        //     then process disconnections => then connections
-        
+    public void simulate(int tickDurationInMinutes) {       
         for (int i = tickDurationInMinutes; i > 0; i--) {
             updatePossibleConnections();
             updateSatellitePositions();
@@ -178,23 +169,23 @@ public class Blackout {
             processDisconnections();
             processConnections();
             currentTime = currentTime.plusMinutes(1);
-        }
-        
+        }        
     }
-
+    
+    /**
+     * Updates existing connections (incremants minutesActive)
+     */
     private void updateExistingConnections() {
         for (Satellite s : satellites) {
             s.updateActiveConnections();
         }
     }
 
-
-
+    /**
+     * Loop through every device in ID order. Connect to satellite if possible
+     */
     private void processConnections() {
-
         Collections.sort(satellites, compareByPosition);
-        
-        
         for (Device d : devices) {
             ArrayList<Satellite> possibleConnections = new ArrayList<Satellite>();
             findPossibleConnections(d, possibleConnections);
@@ -202,7 +193,11 @@ public class Blackout {
         }
         Collections.sort(satellites, compareByIds);
     }
-
+    /**
+     * Finds a list of possible connections that a device may have
+     * @param d Device
+     * @param possibleConnections List of Satellites Device may be able to connect to
+     */
     private void findPossibleConnections(Device d, ArrayList<Satellite> possibleConnections) {
         for (Satellite s : satellites) {
             if (s.isSupported(d) && s.isVisible(d)){
@@ -210,14 +205,17 @@ public class Blackout {
             }
         }
     }
-
-    private void processDisconnections() {
-        
+    /**
+     * Loop through satellite connections and if any are out of range or outside period, disconnect them
+     */
+    private void processDisconnections() {        
         for (Satellite s : satellites) {
             s.validateConnections(currentTime); 
         } 
     }
-
+    /**
+     * updates satelite positions
+     */
     private void updateSatellitePositions() {
         for (Satellite s : satellites) {
             s.updatePosition();

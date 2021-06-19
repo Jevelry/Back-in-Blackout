@@ -11,7 +11,6 @@ public class connection {
     private int minutesActive;
     private String satelliteId;
 
-
     public connection(String deviceId, LocalTime startTime, String satelliteId, int timeToConnect) {
         this.startTime = startTime;
         this.deviceId = deviceId;
@@ -19,21 +18,18 @@ public class connection {
         minutesActive = 0 - timeToConnect;
     }
 
-
-
-    public void updateConnection(){
+    public void updateConnection() {
         minutesActive++;
     }
 
-
-    public void endConnection(LocalTime currentTime){
+    public void endConnection(LocalTime currentTime) {
         endTime = currentTime;
         minutesActive -= 1;
     }
-    
+
     /*
-    getters and setter, not used but i think are needed for showWorldState
-    */
+     * getters and setter, not used but i think are needed for showWorldState
+     */
 
     public String getDeviceId() {
         return this.deviceId;
@@ -56,12 +52,10 @@ public class connection {
     }
 
     public boolean validateConnection(String id) {
-        if (Objects.isNull(endTime) && deviceId.equals(id)){
+        if (Objects.isNull(endTime) && deviceId.equals(id)) {
             return true;
         }
         return false;
     }
 
-
-    
 }

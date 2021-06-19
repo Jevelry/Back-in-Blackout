@@ -4,25 +4,25 @@ import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 
-public class SpaceX extends Satellite{
+public class SpaceX extends Satellite {
     private List<Device> connectedDevices = new ArrayList<Device>();
-    int timeToConnect;
-    
+
     public SpaceX(String id, String type, double height, double position) {
         super(id, type, height, position);
         setVelocity(55.5);
         addSupportedDevice("HandheldDevice");
     }
-
+    @Override
     public void validateConnections(LocalTime currentTime) {
         for (Device d : connectedDevices) {
             if (!d.inActivationPeriod(currentTime) || !isVisible(d)) {
-                disconnect(d, currentTime);
+                disconnect(d, currentTime, this);
                 connectedDevices.remove(d);
             }
-
         }
     }
+
+    @Override
     public void connect(LocalTime currentTime, Device d, int timeToConnect) {
         int ttc = calcTimetoConnect(timeToConnect);
 
@@ -30,8 +30,9 @@ public class SpaceX extends Satellite{
         addConnection(newConnection);
         connectedDevices.add(d);
     }
+
     @Override
-    public int calcTimetoConnect(int timeToConnect) {        
+    public int calcTimetoConnect(int timeToConnect) {
         return 0;
     }
 }
